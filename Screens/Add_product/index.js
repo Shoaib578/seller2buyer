@@ -24,10 +24,11 @@ class AddProduct extends React.Component {
     hsn_code:'',
     tax_tier:'',
     ordering_unit:'',
-    variant:'',
+    
     stock_keeping_unit_size:'',
     moq:'',
     price:'',
+    subscription:false,
     all_categories:[],
     add_product_loading:false,
     isLoading:true
@@ -41,7 +42,22 @@ class AddProduct extends React.Component {
     this.setState({role:parse.role,isLoading:false})
   }
 
+  check_exist_subscription = async()=>{
+    const user = await AsyncStorage.getItem("user")
+    const parse = JSON.parse(user)
+    Axios.get(base_url +'/apis/check_my_subscription?my_id='+parse.id)
+    .then(res=>{
+        res.data.check.map(data=>{
+            if(data.has_susbs == 1){
+                this.setState({subscription:true})
+                
+            }else{
+                this.setState({subscription:false})
 
+            }
+        })
+    })
+}
 
     pickImage1 =  () => {
         const options = {
@@ -117,12 +133,12 @@ class AddProduct extends React.Component {
         const user = await AsyncStorage.getItem('user')
         const parse = JSON.parse(user)
         if(this.state.product_name.length <1 || this.state.product_description.length<1 ||
-           this.state.tax_tier.length<1 || this.state.hsn_code.length<1 ||
-            this.state.sku_code.length<1 || this.state.stock_keeping_unit_size.length<1 || 
-            this.state.quality_description.length<1 || this.state.category.length<1 || 
+           this.state.tax_tier.length<1  ||
+            
+             this.state.category.length<1 || 
             this.state.product_image1.length<1 || this.state.product_image2.length<1 || 
-            this.state.product_image3.length<1 || this.state.price.length<1 || this.state.variant.length<1 || this.state.ordering_unit.length<1 
-            ||this.state.moq.length<1 || this.state.tags.length<1
+            this.state.product_image3.length<1 || this.state.price.length<1  
+          
             ){
               Alert.alert("Please Fill All the Fields")
               return false;
@@ -134,14 +150,14 @@ class AddProduct extends React.Component {
         formData.append('posted_by',parse.id)
         formData.append("product_title",this.state.product_name)
         formData.append("product_description",this.state.product_description)
-        formData.append("quality_description",this.state.quality_description)
+        
         formData.append("price",this.state.price)
         formData.append("sku_code",this.state.sku_code)
         formData.append("hsn_code",this.state.hsn_code)
         formData.append("category",this.state.category)
         formData.append("tax_tier",this.state.tax_tier)
         formData.append("stock_keeping_unit",this.state.stock_keeping_unit_size)
-        formData.append("variant",this.state.variant)
+     
         formData.append("ordering_unit",this.state.ordering_unit)
         formData.append("moq",this.state.moq)
         formData.append("tags",this.state.tags.toString())
@@ -179,7 +195,7 @@ class AddProduct extends React.Component {
             hsn_code:'',
             tax_tier:'',
             ordering_unit:'',
-            variant:'',
+           
             stock_keeping_unit_size:'',
             moq:'',
             price:'',
@@ -197,6 +213,7 @@ class AddProduct extends React.Component {
       }
 
       componentDidMount(){
+        this.check_exist_subscription()
         this.CheckUserRole()
         this.getAllCategories()
       }
@@ -204,7 +221,7 @@ class AddProduct extends React.Component {
     render(){
       if(this.state.isLoading == false){
 
-      if(this.state.role == "seller"){
+      if(this.state.subscription == true){
 
         return (
             <View  style={{marginTop:20,alignItems: 'center',flex:1}}>
@@ -232,7 +249,7 @@ class AddProduct extends React.Component {
            
             <Text style={{ marginTop:20 }}>Category*</Text>
 
-            <View style={{ borderWidth:1,borderColor:'#57b5b6',borderRadius:5,width:Dimensions.get('window').width*2/2.2,marginTop:7 }}>
+            <View style={{ borderWidth:1,borderColor:'#57b5b6',borderRadius:5,width:Dimensions.get('window').width*2/2.2,marginTop:7,height:50 }}>
             <Picker
 
             selectedValue={this.state.category}
@@ -318,17 +335,7 @@ class AddProduct extends React.Component {
 
                 </View>
 
-                <View >
-                <Text style={{ marginTop:20 }}>Quality Description*</Text>
-
-                    <TextInput multiline = {true}
-                onChangeText={(val)=>this.setState({quality_description:val})}
-                value={this.state.quality_description}
-                    numberOfLines = {2} placeholder=''   
-                    style={{ borderWidth:1,borderColor:'#57b5b6',borderRadius:5,width:Dimensions.get('window').width*2/2.2,padding:5,marginTop:10 }}
-                    />
-                        
-                </View>
+              
 
 
                 <View>
@@ -351,7 +358,7 @@ class AddProduct extends React.Component {
 
                 <Text style={{ marginTop:20 }}>Stock Keeping Unit Size*</Text>
 
-                <View style={{ borderWidth:1,borderColor:'#57b5b6',borderRadius:5,width:Dimensions.get('window').width*2/2.2,marginTop:7 }}>
+                <View style={{ borderWidth:1,borderColor:'#57b5b6',borderRadius:5,width:Dimensions.get('window').width*2/2.2,marginTop:7,height:50 }}>
                 <Picker
 
                 selectedValue={this.state.stock_keeping_unit_size}
@@ -375,18 +382,7 @@ class AddProduct extends React.Component {
 
                 </View>
 
-                <View>
-                <Text style={{ marginTop:20 }}>Variant*</Text>
-
-                <TextInput 
-                onChangeText={(val)=>this.setState({variant:val})}
-                
-                placeholder='color etc'   
-                style={{ borderWidth:1,borderColor:'#57b5b6',borderRadius:5,width:Dimensions.get('window').width*2/2.2,padding:5,marginTop:10 }}
-                />
-             
-
-                </View>
+              
 
 
 
@@ -455,7 +451,7 @@ class AddProduct extends React.Component {
            
                 {this.state.add_product_loading?<ActivityIndicator size="large" color="#57b5b6" />:null}
             <TouchableOpacity onPress={this.AddProduct} style={styles.AddProductBtn}>
-                <Text style={{color:'white'}}>Add+</Text>
+                <Text style={{color:'white'}}>Add Product</Text>
             </TouchableOpacity>
 
 
@@ -468,8 +464,8 @@ class AddProduct extends React.Component {
         return(
           <View style={{marginTop:'30%',justifyContent:'center',alignItems: 'center'}}>
             <Image source={require("../../Assets/sorry.png")} style={{height:200,width:200}}/>
-            <Text style={{fontSize:20}}>Sorry Your Are Not Seller</Text>
-            <Text style={{fontSize:15}}>To Be Able To Sell the Products You will Need To Be Seller</Text>
+            <Text style={{fontSize:20}}>Sorry Your Do Not Have Subscription</Text>
+            <Text style={{fontSize:15}}>Please Buy Subscription To Be Able To Add Product</Text>
 
           </View>
         )

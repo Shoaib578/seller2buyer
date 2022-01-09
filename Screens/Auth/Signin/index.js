@@ -5,7 +5,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo'
 import Foundation from 'react-native-vector-icons/Foundation'
-
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import styles from '../../Styles/SigninStyle';
 import validator from 'validator';
 import  Axios  from 'axios';
@@ -17,7 +17,7 @@ class Signin extends React.Component {
         is_loading:false
     }
 
-    SignIn = ()=>{
+    SignIn = async()=>{
     
     
         if(validator.isMobilePhone(this.state.phone_no) == false){
@@ -40,8 +40,15 @@ class Signin extends React.Component {
             this.setState({is_loading:false})
 
             if(res.data.msg == "success"){
+         
+           await  AsyncStorage.setItem('user',JSON.stringify(res.data.user))
+
            
-            this.props.navigation.navigate("enter_otp",{otp:res.data.verification_code,user:res.data.user,screen:'login'})
+
+            this.props.navigation.reset({
+                index: 0,
+                routes: [{ name: 'home', screen: 'Home' }]
+            });
             }else{
                 Alert.alert("Invalid Phone Number or Password")
             }
@@ -55,10 +62,10 @@ class Signin extends React.Component {
     render(){
         return(
             <ScrollView style={styles.container}>
+                <Image source={require('../../../Assets/logo.png')} style={{width:'100%',height:100,marginTop:70}}/>
+
                 <SafeAreaView style={{marginTop:10,alignItems: 'center',alignSelf: 'center',}}>
 
-                <Text style={{fontSize:40,color:'white',fontFamily:'san-serif',marginTop:'10%'}}>S2B NOW</Text>
-             <Text style={{ color:'white',fontSize:22 ,}}>SELLER TO BUYER MADE EASY</Text>
 
 
                 <Text style={{color:'white',fontSize:18,marginTop:30}}>Login to Your Account</Text>
@@ -66,7 +73,7 @@ class Signin extends React.Component {
 
                 <View style={styles.text_input}>
                 <Feather name="smartphone" style={styles.phoneImageStyle} color="white" size={25}/>
-                <TextInput placeholder="Digit Mobile Number +9....." onChangeText={(val)=>this.setState({phone_no:val})} value={this.state.phone_no} selectionColor="white" keyboardType="numeric" placeholderTextColor="#DBDBDB" style={{flex:1,color:'white'}} 
+                <TextInput placeholder="Digit Mobile Number +9....." onChangeText={(val)=>this.setState({phone_no:val})} value={this.state.phone_no} selectionColor="white"  placeholderTextColor="#DBDBDB" style={{flex:1,color:'white'}} 
                 />
                 </View>
 

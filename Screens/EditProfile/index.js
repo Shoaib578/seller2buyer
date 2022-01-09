@@ -27,9 +27,9 @@ class EditProfile extends React.Component {
         Axios.get(base_url+'/apis/profile?user_id='+this.props.route.params.user_id)
         .then(res=>{
               this.setState({user:res.data.user,
-                company_initials:res.data.user.companyinitials,
+           
                 companyname:res.data.user.companyname,
-                firstname:res.data.firstname,
+                firstname:res.data.user.firstname,
                 lastname:res.data.user.lastname,
                 email:res.data.user.email,
                 phone_no:res.data.user.phone_no,
@@ -55,26 +55,16 @@ class EditProfile extends React.Component {
            
 
             <Text style={{flex:1,color:'white',top:15}}>{this.state.companyname}</Text>
-            </View>:<View style={[styles.text_input,{borderColor:'#57b5b6',backgroundColor:"#57b5b6"}]}>
+            </View>:
+            
+            <View style={[styles.text_input,{borderColor:'#57b5b6',backgroundColor:"#57b5b6"}]}>
             <Feather name="user" style={styles.phoneImageStyle} color="white" size={25}/>
             <Text style={{flex:1,color:'white',top:15}}>{this.state.firstname}</Text>
 
             </View>}
 
 
-            {this.state.user.role == "seller"?<View style={[styles.text_input,{borderColor:'#57b5b6',backgroundColor:"#57b5b6"}]}>
-            <Foundation name="torso-business" style={styles.phoneImageStyle} color="white" size={25}/>
-            
-            <Text style={{flex:1,color:'white',top:15}}>{this.state.company_initials}</Text>
-
-            </View>:
-            <View style={[styles.text_input,{borderColor:'#57b5b6',backgroundColor:"#57b5b6"}]}>
-            <Feather name="user" style={styles.phoneImageStyle} color="white" size={25}/>
-            
-            <Text style={{flex:1,color:'white',top:15}}>{this.state.lastname}</Text>
-
-            </View>
-            }
+          
 
             <View style={[styles.text_input,{borderColor:'#57b5b6',backgroundColor:"#57b5b6"}]}>
             <Feather name="smartphone" style={styles.phoneImageStyle} color="white" size={25}/>
@@ -85,12 +75,12 @@ class EditProfile extends React.Component {
 
 
 
-            <View style={[styles.text_input,{borderColor:'#57b5b6',backgroundColor:"#57b5b6"}]}>
+            {this.state.email?<View style={[styles.text_input,{borderColor:'#57b5b6',backgroundColor:"#57b5b6"}]}>
             <Feather name="mail" style={styles.phoneImageStyle} color="white" size={25}/>
            
             <Text style={{flex:1,color:'white',top:15}}>{this.state.email}</Text>
 
-            </View>
+            </View>:null}
 
 
 

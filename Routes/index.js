@@ -1,4 +1,4 @@
-import React,{useRef,useState} from 'react';
+import React,{useEffect, useRef,useState,} from 'react';
 import {Text,Animated,View,Dimensions,Platform,TouchableOpacity,Image} from 'react-native'
 import { createStackNavigator,CardStyleInterpolators  } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -38,6 +38,7 @@ import ViewAnotherUserProfile from '../Screens/ViewAnotherUserProfile';
 import ChatProfiles from '../Screens/ChatProfiles';
 import PlacedOrders from '../Screens/PlacedOrders';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Subscriptions from '../Screens/Subscriptions';
 
 
 const Stack = createStackNavigator();
@@ -92,6 +93,7 @@ export default function  RootNavigator (){
         <Stack.Screen name="Product" component={ViewProduct} options={{headerTransparent:true,headerTitle:'',headerTintColor:'#57b5b6'}}/>
         <Stack.Screen name="PlacedOrders" component={PlacedOrders} options={{headerTransparent:false,headerTintColor:'#57b5b6'}}/>
         <Stack.Screen name="MyProducts" component={MyProducts} options={{headerTransparent:false,headerTintColor:'#57b5b6'}}/>
+        <Stack.Screen name="Subscription" component={Subscriptions} options={{headerTransparent:false,headerTintColor:'#57b5b6'}}/>
 
   <Stack.Screen name="Messages" component={Messages} options={{headerTransparent:false,headerTintColor:'#57b5b6',tabBarVisible:false}}/>
          
@@ -167,8 +169,19 @@ export default function  RootNavigator (){
   }
    
    const HomeNavigator = ({route})=>{
-    
-     
+       const[role,setRole] = useState('')
+    useEffect(async()=>{
+        const user = await AsyncStorage.getItem("user")
+        const parse = JSON.parse(user)
+        if(parse.role == 'buyer'){
+            setRole("buyer")
+        }else{
+            setRole("seller")
+
+        }
+
+    },[])
+  
     const tabOffsetValue = useRef(new Animated.Value(0)).current;
     return(
     <Tab.Navigator tabBarOptions={{
@@ -253,10 +266,12 @@ export default function  RootNavigator (){
             })}/>
 
         
-        <Tab.Screen name="Add product" component={AddProduct} options={{
+        {role == 'seller'?<Tab.Screen name="Add product" component={AddProduct}  options={{
                     headerTransparent:false,
                     headerTintColor:"#57b5b6",
                   
+                   
+                    
                     tabBarIcon: ({ focused }) => (
 
                         <View style={{
@@ -278,7 +293,7 @@ export default function  RootNavigator (){
                     
                     </View>
                 )
-                }} ></Tab.Screen>
+                }} ></Tab.Screen>:null}
                
 
 

@@ -34,6 +34,17 @@ class Order extends React.Component {
         })
     }
 
+    complete_order = ()=>{
+        
+        Axios.get(base_url+'/apis/complete_order?order_id='+this.props.data.placed_order_id)
+        .then(res=>{
+            this.props.get_all_pending_orders_func()
+        })
+        .catch(err=>{
+            Alert.alert("Something Went Wrong")
+        })
+    }
+
     
   
     render(){
@@ -105,10 +116,17 @@ class Order extends React.Component {
                 </View>
 
 
-                
+                {this.props.data.is_completed==0?  <View>
             {this.props.data.is_accepted==0?<TouchableOpacity onPress={this.accept_order} style={styles.accept_order_btn}>
                 <Text style={{color:'white',}}>Accept</Text>
-            </TouchableOpacity>:<Text style={{color:'red',fontWeight:'bold',fontSize:16,textAlign:'center',marginTop:20}}>Accepted</Text>}
+            </TouchableOpacity>:
+            <TouchableOpacity onPress={this.complete_order} style={styles.accept_order_btn}>
+            <Text style={{color:'white',}}>Complete Order</Text>
+        </TouchableOpacity>
+            
+            }
+            </View>: <Text style={{textAlign:'center',color:'green'}}>Completed</Text>}    
+
             </View>
 
                 

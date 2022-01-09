@@ -1,14 +1,23 @@
 import React from 'react';
-import {View,Text,TouchableOpacity,Image} from 'react-native'
+import {View,Text,TouchableOpacity,Image, Alert} from 'react-native'
 import styles from '../Styles/Home_Style'
 import Tag from './Tag';
 import Entypo from 'react-native-vector-icons/Entypo'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import base_url from '../../base_url'
+import { Axios } from 'axios';
 class Product extends React.Component {
    
-   
+   delete_product = ()=>{
+       Axios.get(base_url+'/apis/delete_product?id='+this.props.data.product_id)
+       .then(res=>{
+           this.props.get_all_products()
+       })
+       .catch(err=>{
+           Alert.alert("Something Went Wrong")
+       })
+   }
     render(){
         return(
             <TouchableOpacity onPress={()=>this.props.navigation.navigate('Product',{is_cart:true,posted_by:this.props.data.posted_by,product_id:this.props.data.product_id,})} style={styles.product_container}>
@@ -24,7 +33,9 @@ class Product extends React.Component {
                 <Text style={{color:'gray',}}>{this.props.data.posted_date}</Text>
                 </View>
 
-
+                <TouchableOpacity onPress={this.delete_product}>
+                    <FontAwesome name="trash" color="red" size={25}/>
+                </TouchableOpacity>
             </View> 
 
 

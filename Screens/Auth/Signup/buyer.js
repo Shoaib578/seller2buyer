@@ -26,13 +26,7 @@ class SignupBuyer extends React.Component {
 
     SignUp = ()=>{
         
-        if(validator.isEmail(this.state.email)){
-           console.log('valid email')
-
-        }else{
-            Alert.alert("Invalid Email")
-            return false
-        }
+       
         if(this.state.first_name.length<5){
             Alert.alert("First Name must be at least 5 characters")
             return false
@@ -64,8 +58,6 @@ class SignupBuyer extends React.Component {
             Alert.alert("Password Must Be Atleast 6 characters")
             return false
         }
-
-
         console.log("Validated")
         this.setState({is_loading:true})
         let formData = new FormData();
@@ -76,13 +68,16 @@ class SignupBuyer extends React.Component {
         formData.append("phone_number",this.state.phone_no)
         formData.append("primary_contact",this.state.primary_contact)
         formData.append("postal_code",this.state.postal_code)
-        formData.append("email",this.state.email)
-        Axios.post(base_url+"/apis/sign_up",formData)
+      
+
+
+        let otpForm = new FormData();
+        otpForm.append("phone_no",this.state.phone_no)
+        Axios.post(base_url+'/apis/send_otp',otpForm)
         .then(res=>{
-            this.setState({is_loading:false})
-            console.log(res.data)
-            Alert.alert(res.data.msg)
-            if(res.data.msg == "User Registered Successfully"){
+            if(res.data.msg =='success'){
+                this.props.navigation.navigate("enter_otp",{otp:res.data.otp,formData:formData,screen:'register'})
+                this.setState({is_loading:false})
                 this.setState({
                     first_name:"",
                     last_name:"",
@@ -93,14 +88,21 @@ class SignupBuyer extends React.Component {
                     postal_code:"",
                     
                 })
+            }else{
+                this.setState({is_loading:false})
+                Alert.alert(res.data.msg)
             }
+           
         })
         .catch(err=>{
             this.setState({is_loading:false})
 
-            Alert.alert(err)
-
+            Alert.alert("Something Went Wrong")
         })
+        
+
+
+      
     }
 
 
@@ -125,17 +127,13 @@ class SignupBuyer extends React.Component {
 
                 <View style={styles.text_input}>
                 <Feather name="smartphone" style={styles.phoneImageStyle} color="white" size={25}/>
-                <TextInput placeholder="Phone" value={this.state.phone_no} selectionColor="white" onChangeText={(val)=>this.setState({phone_no:val})} keyboardType="numeric" placeholderTextColor="#DBDBDB" style={{flex:1,color:'white'}} 
+                <TextInput placeholder="Phone" value={this.state.phone_no} selectionColor="white" onChangeText={(val)=>this.setState({phone_no:val})}  placeholderTextColor="#DBDBDB" style={{flex:1,color:'white'}} 
                 />
                 </View>
 
 
 
-                <View style={styles.text_input}>
-                <Feather name="mail" style={styles.phoneImageStyle} color="white" size={25}/>
-                <TextInput placeholder="Email" value={this.state.email} onChangeText={(val)=>this.setState({email:val})} selectionColor="white"  placeholderTextColor="#DBDBDB" style={{flex:1,color:'white'}} 
-                />
-                </View>
+              
 
                 <View style={styles.text_input}>
                 <Feather name="lock" style={styles.phoneImageStyle} color="white" size={25}/>

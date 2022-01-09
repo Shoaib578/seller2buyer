@@ -82,6 +82,14 @@ class Profile extends React.Component {
             </TouchableOpacity>
 
 
+
+            {this.state.user.role == 'seller'?<TouchableOpacity onPress={()=>this.props.navigation.navigate('Subscription')}  style={styles.profile_screen_card} >
+            <FontAwesome name="dollar" size={25} color="#57b5b6" style={{marginLeft:'5%'}}/>
+                    
+            <Text style={{ fontSize:16,fontWeight:'bold',color:'#57b5b6',marginLeft:'5%'}}>Subscriptions</Text>
+            </TouchableOpacity>:null}
+
+
             <TouchableOpacity onPress={()=>this.props.navigation.navigate('PlacedOrders')}  style={styles.profile_screen_card} >
             <FontAwesome5 name="clipboard-list" size={25} color="#57b5b6" style={{marginLeft:'5%'}}/>
                     
@@ -95,7 +103,7 @@ class Profile extends React.Component {
             <Text style={{ fontSize:16,fontWeight:'bold',color:'#57b5b6',marginLeft:'5%'}}>My Products</Text>
             </TouchableOpacity>:null}
 
-            <TouchableOpacity onPress={this.Signout} style={[styles.profile_screen_card,{marginBottom:30}]} >
+            <TouchableOpacity onPress={this.Signout} style={[styles.profile_screen_card,{marginBottom:50}]} >
             <Feather name="log-out" size={25} color="#57b5b6" style={{marginLeft:'5%'}}/>
                     
             <Text style={{ fontSize:16,fontWeight:'bold',color:'#57b5b6',marginLeft:'5%'}}>Sign out</Text>
@@ -114,7 +122,7 @@ class Profile extends React.Component {
                 <Text style={{fontSize:17,fontWeight:"bold",textAlign:'center'}}>Something Went Wrong</Text>
                 <TouchableOpacity onPress={()=>{
                     this.setState({isLoading:true,network_error:false})
-                    this.get_all_orders()
+                    this.getUserInfo()
                 }} style={{marginTop:10,alignSelf:'center'}}>
                     <Text>Click Here To Try Again</Text>
                 </TouchableOpacity>

@@ -77,6 +77,18 @@ class Messages extends React.Component {
         
       }
 
+      SeeMessagesNotifications = async()=>{
+        const user = AsyncStorage.getItem("user")
+        const parse = JSON.parse(user)
+        Axios.get(base_url+'/apis/see_messages_notifications?my_id='+parse.id+'&&user_id='+this.props.route.params.user_id)
+        .then(res=>{
+            console.log(res.data.msg)
+        })
+      }
+      
+
+
+
       getAllMessages = async()=>{
         const user = await AsyncStorage.getItem("user")
         const parse = JSON.parse(user)
@@ -97,6 +109,7 @@ class Messages extends React.Component {
           this.getAllMessages()
           setInterval(()=>{
             this.getAllMessages()
+            this.SeeMessagesNotifications()
 
           },10000)
       }

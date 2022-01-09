@@ -174,10 +174,7 @@ class ViewProduct extends React.Component {
                     <Text style={{ right:20,fontSize:15 }}>{data.stock_keeping_unit}</Text>
                     </View>
     
-                    <View style={{ flexDirection:'row',justifyContent:'space-between',marginTop:10,borderBottomWidth:1,borderColor:'black',width:'95%' }}>
-                    <Text style={{ fontSize:15 }}>Variant Color</Text>
-                    <Text style={{ right:20,fontSize:15 }}>{data.variant}</Text>
-                    </View>
+                   
     
                     <View style={{ flexDirection:'row',justifyContent:'space-between',marginTop:10,borderBottomWidth:1,borderColor:'black',width:'95%' }}>
                     <Text style={{ fontSize:15 }}>Ordering unit</Text>

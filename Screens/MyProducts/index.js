@@ -106,7 +106,7 @@ class MyProducts extends React.Component {
                     
             onRefresh={this.handleRefresh}
             renderItem={({item,index})=>(
-                <Product key={index} navigation={this.props.navigation} data={item}/>
+                <Product get_all_products={this.getAllPosts} key={index} navigation={this.props.navigation} data={item}/>
 
             )}
             />
