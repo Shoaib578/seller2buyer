@@ -33,7 +33,7 @@ class SignupSeller extends React.Component {
             return false
         }
         if(this.state.company_name.length<5){
-            Alert.alert("First Name must be at least 5 characters")
+            Alert.alert("Company Name must be at least 5 characters")
             return false
 
         }

@@ -206,14 +206,7 @@ class ViewProduct extends React.Component {
                     </View>
                     
     
-                    <View style={{padding:15,width:'95%',borderColor:'#57b5b6',borderWidth:.5,marginTop:5,alignSelf:'center'}}>
-                    <Text style={{fontWeight:'bold',color:'#57b5b6'}}>Quantity Description : </Text>
-                    <ReadMore numberOfLines={3} seeMoreStyle={{color:'#57b5b6'}} seeLessStyle={{color:'#57b5b6'}}  style={{fontSize:14}}>
-                    {
-                       data.quality_description
-                    }
-                    </ReadMore>
-                    </View>
+                   
 
 
                     {this.props.route.params.is_cart == false?<Text style={{marginLeft:10}}>Quantity*</Text>:null}

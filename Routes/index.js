@@ -168,7 +168,7 @@ export default function  RootNavigator (){
     )
   }
    
-   const HomeNavigator = ({route})=>{
+   const HomeNavigator = (props)=>{
        const[role,setRole] = useState('')
     useEffect(async()=>{
         const user = await AsyncStorage.getItem("user")
@@ -300,7 +300,7 @@ export default function  RootNavigator (){
 
 
 
-        <Tab.Screen name='Notifications' component={NotificationsStack} options={{
+        <Tab.Screen name='NotificationsScreen' component={NotificationsStack} options={{
              headerTransparent:false,
              headerTintColor:"#57b5b6",
              headerShown:false,
@@ -311,11 +311,16 @@ export default function  RootNavigator (){
                         const parse = JSON.parse(user)
                         Axios.get(base_url+'/apis/get_all_notifications_count?my_id='+parse.id)
                         .then(res=>{
+                            console.log("This is the Notifications Count "+ res.data.notifications.length)
                            setNotificationsCount(res.data.notifications.length)
                             
                         })
                     }
-                get_notifications_count()
+                  useEffect(()=>{
+                      get_notifications_count()
+                     
+                    
+                  },[])
                    return(
                     <View style={{
                         // centring Tab Button...

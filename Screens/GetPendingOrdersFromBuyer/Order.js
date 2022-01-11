@@ -125,7 +125,7 @@ class Order extends React.Component {
         </TouchableOpacity>
             
             }
-            </View>: <Text style={{textAlign:'center',color:'green'}}>Completed</Text>}    
+            </View>: <Text style={{textAlign:'center',color:'green',marginTop:20,fontWeight:'bold',}}>Completed</Text>}    
 
             </View>
 

@@ -56,6 +56,7 @@ export default class Subscriptions extends React.Component {
         Axios.post(base_url +'/apis/buy_subscription',formData)
         .then(res=>{
             this.check_exist_subscription()
+            Alert.alert("You have bought Subscription Successfully")
             this.get_my_subscription()
         })
         .catch(err=>{
@@ -147,7 +148,7 @@ export default class Subscriptions extends React.Component {
                     <TouchableOpacity key={index} style={[styles.product_container,{width:Dimensions.get('window').width*2/2.2,}]}>
 
                     <View style={{flexDirection:'row',justifyContent: 'space-between',width:'100%',padding:10,marginTop:4}}>
-                    <Text style={styles.product_container_title}>{data.remaing_time} Days Remaining In Your Subscription Expiration</Text>
+                    <Text style={styles.product_container_title}>Your Subscription will get expire on {data.expiration_date}</Text>
 
 
                     </View>

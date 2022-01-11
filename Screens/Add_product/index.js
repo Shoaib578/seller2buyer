@@ -10,37 +10,41 @@ import base_url from '../../base_url';
 
 
 class AddProduct extends React.Component {
-  state = {
-    product_image1:'',
-    product_image2:'',
-    product_image3:'',
-    tags:[],
-    role:"",
-    category:'',
-    product_name:'',
-    product_description:'',
-    quality_description:'',
-    sku_code:'',
-    hsn_code:'',
-    tax_tier:'',
-    ordering_unit:'',
-    
-    stock_keeping_unit_size:'',
-    moq:'',
-    price:'',
-    subscription:false,
-    all_categories:[],
-    add_product_loading:false,
-    isLoading:true
-    }
+  constructor(props) {
+    super(props)
+    this.state = {
+      product_image1:'',
+      product_image2:'',
+      product_image3:'',
+      tags:[],
+     
+      category:'',
+      product_name:'',
+      product_description:'',
+      quality_description:'',
+      sku_code:'',
+      hsn_code:'',
+      tax_tier:'',
+      ordering_unit:'',
+      
+      stock_keeping_unit_size:'',
+      moq:'',
+      price:'',
+      subscription:false,
+      all_categories:[],
+      add_product_loading:false,
+      isLoading:true
+      }
+      
+      this.check_exist_subscription()
+       
+      this.getAllCategories()
 
-
-  CheckUserRole = async()=>{
-    const user =await AsyncStorage.getItem("user")
-    const parse = JSON.parse(user)
-    
-    this.setState({role:parse.role,isLoading:false})
   }
+  
+
+
+
 
   check_exist_subscription = async()=>{
     const user = await AsyncStorage.getItem("user")
@@ -55,6 +59,7 @@ class AddProduct extends React.Component {
                 this.setState({subscription:false})
 
             }
+            this.setState({isLoading:false})
         })
     })
 }
@@ -143,6 +148,8 @@ class AddProduct extends React.Component {
               Alert.alert("Please Fill All the Fields")
               return false;
         }
+
+
         this.setState({add_product_loading:true});
         
         
@@ -177,9 +184,13 @@ class AddProduct extends React.Component {
           type: this.state.product_image3.type,
           uri: Platform.OS === 'ios' ? this.state.product_image3.uri.replace('file://', '') : this.state.product_image3.uri,
         });
+
         Axios.post(base_url+'/apis/add_product',formData)
         .then(res=>{
+       
+
         this.setState({add_product_loading:false});
+        console.log(res.data.msg)
         if(res.data.msg == "success"){
           this.setState({
             product_image1:'',
@@ -207,16 +218,12 @@ class AddProduct extends React.Component {
 
         })
         .catch(err=>{
+          console.log(err)
           Alert.alert(err)
 
         })
       }
 
-      componentDidMount(){
-        this.check_exist_subscription()
-        this.CheckUserRole()
-        this.getAllCategories()
-      }
 
     render(){
       if(this.state.isLoading == false){
@@ -256,6 +263,8 @@ class AddProduct extends React.Component {
             onValueChange={(val)=>{this.setState({category:val})}}
 
             mode="dropdown">
+            <Picker.Item label="Select Category"  value=" " />
+
               {this.state.all_categories.map((data,index)=>(
             <Picker.Item label={data.category_name} key={index} value={data.category_name} />
 
@@ -415,7 +424,7 @@ class AddProduct extends React.Component {
 
                 <TextInput 
                 onChangeText={(val)=>this.setState({moq:val})}
-                
+                value={this.state.moq}
                 keyboardType='numeric'  placeholder=''   
                 style={{ borderWidth:1,borderColor:'#57b5b6',borderRadius:5,width:Dimensions.get('window').width*2/2.2,padding:5,marginTop:10 }}
                 />
@@ -449,8 +458,9 @@ class AddProduct extends React.Component {
                 )}
             />
            
-                {this.state.add_product_loading?<ActivityIndicator size="large" color="#57b5b6" />:null}
-            <TouchableOpacity onPress={this.AddProduct} style={styles.AddProductBtn}>
+            <TouchableOpacity onPress={this.AddProduct} style={[styles.AddProductBtn,{flexDirection:'row'}]}>
+            {this.state.add_product_loading?<ActivityIndicator size="large" color="white6" />:null}
+
                 <Text style={{color:'white'}}>Add Product</Text>
             </TouchableOpacity>
 
@@ -464,8 +474,8 @@ class AddProduct extends React.Component {
         return(
           <View style={{marginTop:'30%',justifyContent:'center',alignItems: 'center'}}>
             <Image source={require("../../Assets/sorry.png")} style={{height:200,width:200}}/>
-            <Text style={{fontSize:20}}>Sorry Your Do Not Have Subscription</Text>
-            <Text style={{fontSize:15}}>Please Buy Subscription To Be Able To Add Product</Text>
+            <Text style={{fontSize:20}}>Sorry You Do Not Have Any Subscription</Text>
+            <Text style={{fontSize:15}}>Please Go To Account{'>'} Subscription and Buy Subscription To Be Able To Add Product</Text>
 
           </View>
         )

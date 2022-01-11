@@ -84,6 +84,9 @@ class Messages extends React.Component {
         .then(res=>{
             console.log(res.data.msg)
         })
+        .catch(err=>{
+            console.log(err)
+        })
       }
       
 
@@ -109,7 +112,7 @@ class Messages extends React.Component {
           this.getAllMessages()
           setInterval(()=>{
             this.getAllMessages()
-            this.SeeMessagesNotifications()
+          
 
           },10000)
       }

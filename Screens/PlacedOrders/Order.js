@@ -34,7 +34,7 @@ class Order extends React.Component {
 
               
               <TouchableOpacity onPress={()=>this.props.navigation.navigate('ViewAnotherUserProfile',{posted_by:this.props.data.owner_id})} style={{flexDirection:'row'}}>
-              <Image source={require('../../Assets/logo.png')} style={{width:30,height:30,borderRadius:30,borderColor:'black',borderWidth:1}}/>
+              <Image source={require('../../Assets/avatar.png')} style={{width:30,height:30,borderRadius:30,borderColor:'black',borderWidth:1}}/>
               <Text style={{color:'black',fontWeight:'bold',left:10}}>{this.props.data.companyname}</Text>
               </TouchableOpacity>
 

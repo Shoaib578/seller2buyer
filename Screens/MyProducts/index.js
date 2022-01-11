@@ -65,6 +65,11 @@ class MyProducts extends React.Component {
 
     }
 
+    get_all_products_by_deleting = ()=>{
+        this.setState({isLoading:true,data:[]})
+        this.getAllPosts()
+    }
+
     onRefreshgetposts = async()=>{
         const user = await AsyncStorage.getItem("user")
         const parse = JSON.parse(user)
@@ -97,7 +102,7 @@ class MyProducts extends React.Component {
         return (
             <View>
             <FlatList 
-            keyExtractor={item=>item.product_id}
+            keyExtractor={item=>item}
             data={this.state.data} 
             onEndReached={this.handleLoadMore}
             onEndReachedThreshold={.1}
@@ -106,7 +111,7 @@ class MyProducts extends React.Component {
                     
             onRefresh={this.handleRefresh}
             renderItem={({item,index})=>(
-                <Product get_all_products={this.getAllPosts} key={index} navigation={this.props.navigation} data={item}/>
+                <Product get_all_products={this.get_all_products_by_deleting} key={item.product_id} navigation={this.props.navigation} data={item}/>
 
             )}
             />

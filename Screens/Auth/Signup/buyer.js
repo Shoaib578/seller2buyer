@@ -152,7 +152,7 @@ class SignupBuyer extends React.Component {
 
                 <View style={styles.text_input}>
                 <Entypo name="location-pin" style={styles.phoneImageStyle} color="white" size={25}/>
-                <TextInput  placeholder="Postal" value={this.state.postal_code} selectionColor="white" onChangeText={(val)=>this.setState({postal_code:val})} keyboardType="numeric"  placeholderTextColor="white" style={{flex:1,color:'white'}} 
+                <TextInput  placeholder="Postal" value={this.state.postal_code} selectionColor="white" onChangeText={(val)=>this.setState({postal_code:val})} placeholderTextColor="white" style={{flex:1,color:'white'}} 
                 />
                 </View>
 
