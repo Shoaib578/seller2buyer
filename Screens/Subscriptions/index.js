@@ -11,7 +11,8 @@ export default class Subscriptions extends React.Component {
     state = {
         subscriptions:[],
         need_to_buy_subscription:false,
-        my_subscription:[]
+        my_subscription:[],
+        is_loading:true
     }
     get_all_subscription = ()=>{
     Axios.get(base_url+'/apis/get_all_subscriptions')
@@ -37,7 +38,7 @@ export default class Subscriptions extends React.Component {
         .then(res=>{
             res.data.check.map(data=>{
                 if(data.has_susbs == 0){
-                    this.setState({need_to_buy_subscription:true})
+                    this.setState({need_to_buy_subscription:true,is_loading:false})
                     this.get_all_subscription()
                 }else{
                     this.setState({need_to_buy_subscription:false})
@@ -94,7 +95,8 @@ export default class Subscriptions extends React.Component {
         }
     }
     render(){
-       
+        if(this.state.is_loading == false){
+
         if(this.state.need_to_buy_subscription){
 
         return (
@@ -148,7 +150,7 @@ export default class Subscriptions extends React.Component {
                     <TouchableOpacity key={index} style={[styles.product_container,{width:Dimensions.get('window').width*2/2.2,}]}>
 
                     <View style={{flexDirection:'row',justifyContent: 'space-between',width:'100%',padding:10,marginTop:4}}>
-                    <Text style={styles.product_container_title}>Your Subscription will get expire on {data.expiration_date}</Text>
+                    <Text style={styles.product_container_title}>{data.remaing_time} Days Remaining In Your Subscription Expiration</Text>
 
 
                     </View>
@@ -168,5 +170,11 @@ export default class Subscriptions extends React.Component {
 
     
 
-    }
+}else{
+    return(
+        <ActivityIndicator size="large" color="#57b5b6" style={{alignSelf: 'center',marginTop:50}} />
+    )
+}
+}
+
 }
